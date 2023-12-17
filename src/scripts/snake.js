@@ -22,20 +22,43 @@ class Snake {
     });
   }
 
+  // move(direction, grid) {
+  //   const head = { ...this.head };
+  //   switch (direction) {
+  //     case "up":
+  //       head.y = head.y - (1 % grid);
+  //       break;
+  //     case "down":
+  //       head.y = ((head.y + 1) % grid) + 1;
+  //       break;
+  //     case "left":
+  //       head.x = head.x - (1 % grid);
+  //       break;
+  //     case "right":
+  //       head.x = ((head.x + 1) % grid) + 1;
+  //       break;
+  //   }
+  //   this.pos.unshift(head);
+  //   this.pos.pop();
+  // }
+
   move(direction, grid) {
     const head = { ...this.head };
+    // this.pos.unshift(head);
+
+    // Update head based on direction
     switch (direction) {
       case "up":
-        head.y = head.y - (1 % grid);
+        head.y = (head.y - 1 + grid) % grid;
         break;
       case "down":
-        head.y = ((head.y + 1) % grid) + 1;
+        head.y = (head.y + 1) % grid;
         break;
       case "left":
-        head.x = head.x - (1 % grid);
+        head.x = (head.x - 1 + grid) % grid;
         break;
       case "right":
-        head.x = ((head.x + 1) % grid) + 1;
+        head.x = (head.x + 1) % grid;
         break;
     }
     this.pos.unshift(head);
