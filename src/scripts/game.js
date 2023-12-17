@@ -1,33 +1,138 @@
-import Snake from "./snake";
-import Fruit from "./fruits";
+import Snake from "./snake.js";
+import Fruit from "./fruits.js";
 class Game {
-  constructor() {
-    this.screen = document.getElementById("snakeCanvas");
-    this.ctx = this.screen.getContext("2d");
-    this.tileCount = 20;
-    this.tileSize = this.screen.width / this.tileCount - 2;
-    this.snake = new Snake(this.ctx, this.tileCount, this.tileSize);
-    this.goodFruit = new Fruit(this.ctx, this.tileSize, "good");
-    this.badFruit = new Fruit(this.ctx, this.tileSize, "bad");
+  constructor(screen) {
+    this.screen = screen;
+    this.ctx = screen.getContext("2d");
+    this.direction = "right";
     this.score = 0;
     this.level = 1;
+    this.tileSize = 24;
+    this.grid = screen.width / this.tileSize;
+    this.snake = new Snake(this.ctx, this.tileSize, this.grid);
+    this.goodFruit = new Fruit(this.ctx, this.grid, "good");
+    this.badFruit = new Fruit(this.ctx, this.grid, "bad");
   }
 
+  isEatingFruit() {
+    const head = this.snake.head;
+    return (
+      head.x === this.goodFruit.position.x &&
+      head.y === this.goodFruit.position.y
+    );
+  }
+  move() {
+    this.snake.move(this.direction, this.grid + 1);
+
+    // debugger;
+    if (this.isCollision() || this.isOutOfBounds()) {
+      // debugger;
+      this.endGame();
+      return;
+    }
+    if (this.isEatingFruit()) {
+      if (this.checkCollision()) {
+        this.endGame();
+        return;
+      }
+      this.snake.grow();
+      this.score++;
+      if (this.score % 5 === 0) {
+        this.level++;
+      }
+      this.goodfruit = this.goodFruit.getRandomPosition();
+      this.badFruit = this.badFruit.getRandomPosition();
+    }
+  }
+
+  isCollision() {
+    const head = this.snake.head;
+    return this.snake.pos
+      .slice(1)
+      .some((spot) => spot.x === head.x && spot.y === head.y);
+  }
+
+  isOutOfBounds() {
+    const head = this.snake.head;
+    console.log(head.x, head.y, this.grid);
+    if (head.x < 0 || head.x > this.grid || head.y < 0 || head.y > this.grid) {
+      return true;
+    }
+    return false;
+  }
+
+  // checkCollision() {
+  //   const fruitHead = this.badFruit.position;
+  //   const SnakeHead = this.snake.pos;
+  //   if (fruitHead.x === SnakeHead.x && fruitHead.y === SnakeHead.y) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   draw() {
-    // this.snake.fillRect(0,0,screen.width, screen.height);
-    // this.snake.beginPath();
-    // this.snake.rect(20, 20, 150, 100);
-    // this.snake.stroke();
+    this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
     this.snake.drawSnake();
     this.goodFruit.drawFruit();
     this.badFruit.drawFruit();
-
-    // drawScore();
+    this.drawScore();
   }
 
-  // drawFruit(){
+  drawScore() {
+    this.ctx.fillStyle = "white";
+    this.ctx.font = "20px Arial";
+    this.ctx.fillText(`Score: ${this.score} | Level: ${this.level}`, 10, 20);
+  }
 
-  // }
+  endGame() {
+    alert(`Game over! Your score: ${this.score}`);
+    this.resetGame();
+  }
+
+  resetGame() {
+    this.level = 1;
+    this.score = 0;
+    this.direction = "right";
+    this.goodfruit = new Fruit(this.ctx, this.grid, "good");
+    this.badFruit = new Fruit(this.ctx, this.grid, "bad");
+    this.snake = new Snake(this.ctx, this.tileSize, this.grid);
+  }
+
+  handleKeyPress(event) {
+    switch (event.key) {
+      case "ArrowUp":
+        if (this.direction !== "down") {
+          this.direction = "up";
+        }
+        break;
+      case "ArrowDown":
+        if (this.direction !== "up") {
+          this.direction = "down";
+        }
+        break;
+      case "ArrowLeft":
+        if (this.direction !== "right") {
+          this.direction = "left";
+        }
+        break;
+      case "ArrowRight":
+        if (this.direction !== "left") {
+          this.direction = "right";
+        }
+        break;
+    }
+  }
+
+  gameLoop() {
+    this.move();
+    this.draw();
+  }
+
+  startGame() {
+    document.addEventListener("keydown", this.handleKeyPress.bind(this));
+    setInterval(this.gameLoop.bind(this), 150);
+    // document.addEventListener("keyup", () => clearInterval(res));
+  }
 }
 
 export default Game;

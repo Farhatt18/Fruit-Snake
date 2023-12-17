@@ -1,25 +1,26 @@
+// fruit.js
 class Fruit {
-  constructor(ctx, tileSize, type) {
+  constructor(ctx, grid, type) {
+    this.grid = grid;
     this.ctx = ctx;
-    this.tileSize = tileSize;
     this.type = type;
+    this.position = this.getRandomPosition();
+    // this.color = this.type === "good" ? "yellow" : "red";
   }
-
   drawFruit() {
-    this.ctx.fillStyle = this.type === "good" ? "red" : "brown";
-    const [x, y] = this.getRandomPostion();
+    this.ctx.fillStyle = this.type === "good" ? "yellow" : "red";
     this.ctx.fillRect(
-      x * this.tileSize,
-      y * this.tileSize,
-      this.tileSize,
-      this.tileSize
+      this.position.x * this.grid,
+      this.position.y * this.grid,
+      this.grid,
+      this.grid
     );
   }
 
-  getRandomPostion() {
-    const x = Math.floor(Math.random() * this.tileSize);
-    const y = Math.floor(Math.random() * this.tileSize);
-    return [x, y];
+  getRandomPosition() {
+    const x = Math.floor(Math.random() * this.grid);
+    const y = Math.floor(Math.random() * this.grid);
+    return { x, y };
   }
 }
 
