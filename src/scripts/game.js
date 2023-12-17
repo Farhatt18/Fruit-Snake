@@ -10,38 +10,54 @@ class Game {
     this.tileSize = 24;
     this.grid = screen.width / this.tileSize;
     this.snake = new Snake(this.ctx, this.tileSize, this.grid);
-    this.goodFruit = new Fruit(this.ctx, this.grid, "good");
-    this.badFruit = new Fruit(this.ctx, this.grid, "bad");
+    this.goodFruit = new Fruit(this.ctx, this.grid, this.snake, "good");
+    this.badFruit = new Fruit(this.ctx, this.grid, this.snake, "bad");
   }
 
   isEatingFruit() {
-    const head = this.snake.head;
-    return (
-      head.x === this.goodFruit.position.x &&
-      head.y === this.goodFruit.position.y
-    );
+    const head = this.snake.pos[0];
+    const fruit =
+      this.goodFruit.type === "good" ? this.goodFruit : this.badFruit;
+    return head.x === fruit.position.x && head.y === fruit.position.y;
   }
+  // move() {
+  //   this.snake.move(this.direction, this.grid + 1);
+
+  //   // debugger;
+  //   if (this.isCollision() || this.isOutOfBounds()) {
+  //     // debugger;
+  //     this.endGame();
+  //     return;
+  //   }
+  //   if (this.isEatingFruit()) {
+  //     this.snake.grow();
+  //     this.score++;
+  //     if (this.score % 5 === 0) {
+  //       this.level++;
+  //     }
+  //     this.goodFruit = this.goodFruit.getRandomFruitPosition();
+  //     this.badFruit = this.badFruit.getRandomFruitPosition();
+  //   }
+  // }
+
   move() {
     this.snake.move(this.direction, this.grid + 1);
 
-    // debugger;
-    if (this.isCollision() || this.isOutOfBounds()) {
-      // debugger;
+    if (this.isCollision() || this.isOutOfBounds() || this.checkCollision()) {
       this.endGame();
       return;
     }
+
     if (this.isEatingFruit()) {
-      if (this.checkCollision()) {
-        this.endGame();
-        return;
-      }
       this.snake.grow();
       this.score++;
+
       if (this.score % 5 === 0) {
         this.level++;
       }
-      this.goodfruit = this.goodFruit.getRandomPosition();
-      this.badFruit = this.badFruit.getRandomPosition();
+
+      this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
+      this.badFruit.position = this.badFruit.getRandomFruitPosition();
     }
   }
 
@@ -61,14 +77,14 @@ class Game {
     return false;
   }
 
-  // checkCollision() {
-  //   const fruitHead = this.badFruit.position;
-  //   const SnakeHead = this.snake.pos;
-  //   if (fruitHead.x === SnakeHead.x && fruitHead.y === SnakeHead.y) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  checkCollision() {
+    const fruitHead = this.badFruit.position;
+    const SnakeHead = this.snake.pos;
+    if (fruitHead.x === SnakeHead.x && fruitHead.y === SnakeHead.y) {
+      return true;
+    }
+    return false;
+  }
 
   draw() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
@@ -93,9 +109,10 @@ class Game {
     this.level = 1;
     this.score = 0;
     this.direction = "right";
-    this.goodfruit = new Fruit(this.ctx, this.grid, "good");
-    this.badFruit = new Fruit(this.ctx, this.grid, "bad");
+    this.goodfruit = new Fruit(this.ctx, this.grid, this.snake, "good");
+    this.badFruit = new Fruit(this.ctx, this.grid, this.snake, "bad");
     this.snake = new Snake(this.ctx, this.tileSize, this.grid);
+    clearInterval(this.speedUpInterval);
   }
 
   handleKeyPress(event) {
@@ -130,8 +147,15 @@ class Game {
 
   startGame() {
     document.addEventListener("keydown", this.handleKeyPress.bind(this));
-    setInterval(this.gameLoop.bind(this), 150);
+    this.gameInterval = setInterval(this.gameLoop.bind(this), 150);
     // document.addEventListener("keyup", () => clearInterval(res));
+
+    this.speedUpInterval = setInterval(() => {
+      if (this.score > 5) {
+        clearInterval(this.gameInterval);
+        this.gameInterval = setInterval(this.gameLoop.bind(this), 100);
+      }
+    }, 1000);
   }
 }
 

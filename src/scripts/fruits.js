@@ -1,10 +1,11 @@
 // fruit.js
 class Fruit {
-  constructor(ctx, grid, type) {
+  constructor(ctx, grid, snake, type) {
     this.grid = grid;
     this.ctx = ctx;
+    this.snake = snake;
     this.type = type;
-    this.position = this.getRandomPosition();
+    this.position = this.getRandomFruitPosition();
     // this.color = this.type === "good" ? "yellow" : "red";
   }
   drawFruit() {
@@ -17,10 +18,21 @@ class Fruit {
     );
   }
 
-  getRandomPosition() {
-    const x = Math.floor(Math.random() * this.grid);
-    const y = Math.floor(Math.random() * this.grid);
-    return { x, y };
+  getRandomFruitPosition() {
+    let newPosition;
+    do {
+      newPosition = {
+        x: Math.floor(Math.random() * this.grid),
+        y: Math.floor(Math.random() * this.grid),
+      };
+    } while (this.isPositionOccpied(newPosition));
+    return newPosition;
+  }
+
+  isPositionOccpied(newPosition) {
+    return this.snake.pos.some(
+      (spot) => spot.x === newPosition.x && spot.y === newPosition.y
+    );
   }
 }
 
