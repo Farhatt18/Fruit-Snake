@@ -21,27 +21,6 @@ class Snake {
       );
     });
   }
-
-  // move(direction, grid) {
-  //   const head = { ...this.head };
-  //   switch (direction) {
-  //     case "up":
-  //       head.y = head.y - (1 % grid);
-  //       break;
-  //     case "down":
-  //       head.y = ((head.y + 1) % grid) + 1;
-  //       break;
-  //     case "left":
-  //       head.x = head.x - (1 % grid);
-  //       break;
-  //     case "right":
-  //       head.x = ((head.x + 1) % grid) + 1;
-  //       break;
-  //   }
-  //   this.pos.unshift(head);
-  //   this.pos.pop();
-  // }
-
   move(direction, grid) {
     const head = { ...this.head };
     // this.pos.unshift(head);
