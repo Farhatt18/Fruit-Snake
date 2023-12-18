@@ -25,11 +25,11 @@ class Fruit {
         x: Math.floor(Math.random() * this.grid),
         y: Math.floor(Math.random() * this.grid),
       };
-    } while (this.isPositionOccpied(newPosition));
+    } while (this.isPositionOccupied(newPosition));
     return newPosition;
   }
 
-  isPositionOccpied(newPosition) {
+  isPositionOccupied(newPosition) {
     return this.snake.pos.some(
       (spot) => spot.x === newPosition.x && spot.y === newPosition.y
     );

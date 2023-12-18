@@ -135,7 +135,7 @@ class Game {
     this.speedUpInterval = setInterval(() => {
       if (this.score > 5) {
         clearInterval(this.gameInterval);
-        this.gameInterval = setInterval(this.gameLoop.bind(this), 100);
+        this.gameInterval = setInterval(this.gameLoop.bind(this), 150);
       }
     }, 1000);
   }
