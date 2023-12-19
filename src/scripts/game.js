@@ -22,7 +22,10 @@ class Game {
     const head = this.snake.pos[0];
     const fruit =
       this.goodFruit.type === "good" ? this.goodFruit : this.badFruit;
-    return head.x === fruit.position.x && head.y === fruit.position.y;
+    return (
+      Math.floor(head.x) === Math.floor(fruit.position.x) &&
+      Math.floor(head.y) === Math.floor(fruit.position.y)
+    );
   }
 
   move(timestamp) {
@@ -42,9 +45,10 @@ class Game {
         this.score++;
         if (this.score % 5 === 0) {
           this.level++;
-          if (this.score === 5) {
-            this.frameInterval = 150;
-          }
+          this.frameInterval = 150;
+          // if (this.score === 5) {
+          //   this.frameInterval = 150;
+          // }
         }
         this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
         this.badFruit.position = this.badFruit.getRandomFruitPosition();
@@ -73,10 +77,27 @@ class Game {
   }
 
   checkCollision() {
-    const head = this.snake.pos[0];
+    const head = this.snake.head;
     const fruitHead = this.badFruit.position;
-    return head.x === fruitHead.x && head.y === fruitHead.y;
+    return (
+      Math.floor(head.x) === Math.floor(fruitHead.x) &&
+      Math.floor(head.y) === Math.floor(fruitHead.y)
+    );
   }
+
+  // checkCollision() {
+  //   const head = this.snake.head;
+  //   const fruit = this.badFruit.position;
+  //   const tileSize = this.tileSize;
+
+  //   // Check if the snake's head is within the boundaries of the bad fruit
+  //   return (
+  //     head.x < fruit.x + tileSize &&
+  //     head.x + tileSize > fruit.x &&
+  //     head.y < fruit.y + tileSize &&
+  //     head.y + tileSize > fruit.y
+  //   );
+  // }
 
   draw() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
