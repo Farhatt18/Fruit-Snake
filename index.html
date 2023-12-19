@@ -11,19 +11,25 @@
   </head>
 
   <body>
-    <!-- <div id="main"></div> -->
-    <div id="title">
+    <!-- <button onclick="toggleMuted()">Mute|Unmute</button> -->
+    <div id="sound-container"><img id="mute" src="assets/unmute.png" /></div>
+    <div id="main">
       <h1>Fruit Snake</h1>
-    </div>
-    <canvas id="snakeCanvas" width="600" height="600"></canvas>
-    <div id="instruction-modal" class="modal">
-      <div id="modal-content">
-        <button id="start-game--btn">Start Game</button>
-        <p>Instructions:</p>
-        <p>Use arrow keys to control the snake.</p>
-        <p>Eat the green fruits to score points.</p>
-        <p>Avoid the red fruits, collisions with the walls and yourself.</p>
-        <p>Press "Start Game" to start the game.</p>
+      <canvas id="snakeCanvas" width="600" height="600"></canvas>
+      <div id="instruction-modal" class="modal">
+        <div id="modal-content">
+          <button id="start-game--btn">Start Game</button>
+          <div id="instruction">
+            <p>Instructions:</p>
+            <p>Use arrow keys to control the snake.</p>
+            <p>Eat the green fruits to score points.</p>
+            <p>Avoid the red fruits, collisions with the walls and yourself.</p>
+            <p>Press "Start Game" to start the game.</p>
+          </div>
+          <a href="https://github.com/Farhatt18"
+            ><img id="git" src="./assets/githubicon.png"
+          /></a>
+        </div>
       </div>
     </div>
     <script type="module" src="./src/index.js" defer></script>

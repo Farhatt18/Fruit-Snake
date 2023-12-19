@@ -16,6 +16,30 @@ class Game {
 
     this.lastTimestamp = 0;
     this.frameInterval = 200;
+
+    this.mainSound = new Audio("./assets/sounds/music.mp3");
+    this.mainSound.volume = 0.5;
+    this.mainSound.loop = true;
+    this.isMuted = false;
+
+    const muteBtn = document.getElementById("mute");
+    const updateMuteBtn = () => {
+      muteBtn.src = this.mainSound.muted
+        ? "./assets/mute.png"
+        : "./assets/unmute.png";
+    };
+    muteBtn.addEventListener("click", () => {
+      this.muteToggle();
+      updateMuteBtn();
+    });
+
+    updateMuteBtn();
+  }
+
+  muteToggle() {
+    this.isMuted = !this.isMuted;
+
+    this.mainSound.muted = this.isMuted;
   }
 
   isEatingFruit() {
@@ -46,9 +70,9 @@ class Game {
         if (this.score % 5 === 0) {
           this.level++;
           this.frameInterval = 150;
-          // if (this.score === 5) {
-          //   this.frameInterval = 150;
-          // }
+          if (this.score === 10) {
+            this.frameInterval = 100;
+          }
         }
         this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
         this.badFruit.position = this.badFruit.getRandomFruitPosition();
@@ -84,21 +108,6 @@ class Game {
       Math.floor(head.y) === Math.floor(fruitHead.y)
     );
   }
-
-  // checkCollision() {
-  //   const head = this.snake.head;
-  //   const fruit = this.badFruit.position;
-  //   const tileSize = this.tileSize;
-
-  //   // Check if the snake's head is within the boundaries of the bad fruit
-  //   return (
-  //     head.x < fruit.x + tileSize &&
-  //     head.x + tileSize > fruit.x &&
-  //     head.y < fruit.y + tileSize &&
-  //     head.y + tileSize > fruit.y
-  //   );
-  // }
-
   draw() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
     this.snake.drawSnake();
@@ -114,7 +123,7 @@ class Game {
   }
 
   endGame() {
-    alert(`Game over! Your score: ${this.score}`);
+    alert(`Game over! Your score: ${this.score}, Your level: ${this.level}`);
     this.resetGame();
   }
 
@@ -155,6 +164,7 @@ class Game {
   gameLoop(timestamp) {
     this.move(timestamp);
     this.draw();
+    this.mainSound.play();
     requestAnimationFrame(this.gameLoop.bind(this));
   }
 
