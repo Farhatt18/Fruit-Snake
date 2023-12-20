@@ -47,6 +47,7 @@ class Game {
     });
 
     updateMuteBtn();
+    this.mainSound.play();
   }
 
   togglePause() {
@@ -271,7 +272,6 @@ class Game {
     highScoreDisplay.textContent = `High Score: ${highScore}`;
 
     document.addEventListener("keydown", this.handleKeyPress.bind(this));
-    this.mainSound.play();
     requestAnimationFrame(this.gameLoop.bind(this));
   }
 }
