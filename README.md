@@ -47,6 +47,10 @@ Fruit Snake project will primarily use:
 
 - In here, the speed will adjust based on score. When score hits 5 the frameInterval will change to 150 making the speed faster and when the score hits 10 it goes more faster.
 
+### LocalStorage
+
+![Alt text](./assets/localStorage.png)
+
 ### Future Implementations:
 
 - Add sprites for fruits and snake.
