@@ -47,6 +47,7 @@ class Game {
     });
 
     updateMuteBtn();
+
     this.mainSound.play();
   }
 
@@ -270,6 +271,7 @@ class Game {
     const highScore = localStorage.getItem("highScore") || 0;
     const highScoreDisplay = document.getElementById("high-score-display");
     highScoreDisplay.textContent = `High Score: ${highScore}`;
+    this.mainSound.play();
 
     document.addEventListener("keydown", this.handleKeyPress.bind(this));
     requestAnimationFrame(this.gameLoop.bind(this));
