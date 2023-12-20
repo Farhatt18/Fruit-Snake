@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const screen = document.getElementById("snakeCanvas");
   const game = new Game(screen);
   const startGameBtn = document.getElementById("start-game--btn");
-  game.mainSound.play();
+  // game.mainSound.play();
 
   startGameBtn.addEventListener("click", function () {
     game.buttonSound.play();

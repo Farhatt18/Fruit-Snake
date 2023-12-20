@@ -79,6 +79,7 @@ h1 {
   position: relative;
   text-align: center;
   bottom: 25px;
+  height: 40px;
 }
 
 #snakeCanvas {
@@ -114,10 +115,17 @@ h1 {
   font-size: 20px;
 }
 
+#sound-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 #mute {
-  position: relative;
-  top: 120px;
-  left: 350px;
+  margin: 10px;
+  display: flex;
+  right: 200px;
+  z-index: 1;
 }
 
 #git,
@@ -153,6 +161,7 @@ h1 {
   cursor: pointer;
   border: none;
   border-radius: 10px;
+  margin-bottom: 20px;
 }
 
 #restart-btn:hover {

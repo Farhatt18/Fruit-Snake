@@ -12,8 +12,8 @@
 
   <body>
     <!-- <button onclick="toggleMuted()">Mute|Unmute</button> -->
-    <div id="sound-container"><img id="mute" src="assets/unmute.png" /></div>
     <div id="main">
+      <div id="sound-container"><img id="mute" src="assets/unmute.png" /></div>
       <h1>Fruit Snake</h1>
       <canvas id="snakeCanvas" width="600" height="600"></canvas>
       <div id="instruction-modal" class="modal">
@@ -42,6 +42,7 @@
             <p><span id="score-display"></span></p>
             <p><span id="level-display"></span></p>
             <button id="restart-btn">Restart</button>
+            <p id="high-score-display">High Score: 0</p>
           </div>
         </div>
       </div>

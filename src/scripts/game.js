@@ -72,6 +72,20 @@ class Game {
     );
   }
 
+  // isEatingFruit() {
+  //   const head = this.snake.head;
+  //   const fruit =
+  //     this.goodFruit.type === "good" ? this.goodFruit : this.badFruit;
+
+  //   // Introduce a tolerance for collision detection
+  //   const tolerance = 0.1;
+
+  //   return (
+  //     Math.abs(head.x - fruit.position.x) < tolerance &&
+  //     Math.abs(head.y - fruit.position.y) < tolerance
+  //   );
+  // }
+
   move(timestamp) {
     if (this.isPaused) return;
     const elapsed = timestamp - this.lastTimestamp;
@@ -131,6 +145,7 @@ class Game {
       Math.floor(head.y) === Math.floor(fruitHead.y)
     );
   }
+
   draw() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
     this.snake.drawSnake();
@@ -151,9 +166,19 @@ class Game {
     const modal = document.getElementById("game-over-modal");
     const scoreDisplay = document.getElementById("score-display");
     const levelDisplay = document.getElementById("level-display");
+    const highScoreDisplay = document.getElementById("high-score-display");
+
+    let highScore = localStorage.getItem("highScore") || 0;
+
+    if (this.score > highScore) {
+      highScore = this.score;
+      // Update the high score in localStorage
+      localStorage.setItem("highScore", highScore);
+    }
 
     scoreDisplay.textContent = `Your Score: ${this.score}`;
     levelDisplay.textContent = `Your Level: ${this.level}`;
+    highScoreDisplay.textContent = `High Score: ${highScore}`;
 
     modal.style.display = "flex";
 
@@ -175,6 +200,7 @@ class Game {
     this.goodFruit = new Fruit(this.ctx, this.grid, this.snake, "good");
     this.badFruit = new Fruit(this.ctx, this.grid, this.snake, "bad");
     this.snake = new Snake(this.ctx, this.tileSize, this.grid);
+    this.isPaused = false;
   }
 
   handleKeyPress(event) {
@@ -207,16 +233,39 @@ class Game {
     this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
   }
 
+  // updateGoodFruitPosition() {
+  //   let newPosition;
+  //   do {
+  //     newPosition = this.goodFruit.getRandomFruitPosition();
+  //   } while (
+  //     this.snake.pos.some(
+  //       (spot) =>
+  //         Math.floor(spot.x) === Math.floor(newPosition.x) &&
+  //         Math.floor(spot.y) === Math.floor(newPosition.y)
+  //     ) ||
+  //     (Math.floor(this.badFruit.position.x) === Math.floor(newPosition.x) &&
+  //       Math.floor(this.badFruit.position.y) === Math.floor(newPosition.y))
+  //   );
+
+  //   this.goodFruit.position = newPosition;
+  // }
+
   gameLoop(timestamp) {
     this.move(timestamp);
     this.draw();
     if (this.score % 5 === 0 && this.score !== 0 && this.score % 100 === 0) {
       this.updateGoodFruitPosition();
     }
-    requestAnimationFrame(this.gameLoop.bind(this));
+    if (!this.isPaused) {
+      requestAnimationFrame(this.gameLoop.bind(this));
+    }
   }
 
   startGame() {
+    const highScore = localStorage.getItem("highScore") || 0;
+    const highScoreDisplay = document.getElementById("high-score-display");
+    highScoreDisplay.textContent = `High Score: ${highScore}`;
+
     document.addEventListener("keydown", this.handleKeyPress.bind(this));
     this.mainSound.play();
     requestAnimationFrame(this.gameLoop.bind(this));
