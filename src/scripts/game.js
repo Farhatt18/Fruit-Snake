@@ -21,6 +21,7 @@ class Game {
     this.mainSound = new Audio("./assets/sounds/music.mp3");
     this.mainSound.volume = 0.5;
     this.mainSound.loop = true;
+
     this.isMuted = false;
 
     this.buttonSound = new Audio("./assets/sounds/click.mp3");
@@ -47,8 +48,6 @@ class Game {
     });
 
     updateMuteBtn();
-
-    this.mainSound.play();
   }
 
   togglePause() {
