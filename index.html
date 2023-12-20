@@ -17,7 +17,7 @@
       <h1>Fruit Snake</h1>
       <canvas id="snakeCanvas" width="600" height="600"></canvas>
       <div id="instruction-modal" class="modal">
-        <div id="modal-content">
+        <div class="modal-content">
           <button id="start-game--btn">Start Game</button>
           <div id="instruction">
             <p>Instructions:</p>
@@ -29,6 +29,20 @@
           <a href="https://github.com/Farhatt18"
             ><img id="git" src="./assets/githubicon.png"
           /></a>
+          <a href="https://www.linkedin.com/in/farhat-sumaiya-4704b11a3/"
+            ><img id="linkedin" src="./assets/linkdin.png" />
+          </a>
+        </div>
+      </div>
+
+      <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+          <div id="restart">
+            <h2>Game Over</h2>
+            <p><span id="score-display"></span></p>
+            <p><span id="level-display"></span></p>
+            <button id="restart-btn">Restart</button>
+          </div>
         </div>
       </div>
     </div>

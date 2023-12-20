@@ -13,6 +13,7 @@ class Game {
     this.snake = new Snake(this.ctx, this.tileSize, this.grid);
     this.goodFruit = new Fruit(this.ctx, this.grid, this.snake, "good");
     this.badFruit = new Fruit(this.ctx, this.grid, this.snake, "bad");
+    this.isPaused = false;
 
     this.lastTimestamp = 0;
     this.frameInterval = 200;
@@ -21,6 +22,18 @@ class Game {
     this.mainSound.volume = 0.5;
     this.mainSound.loop = true;
     this.isMuted = false;
+
+    this.buttonSound = new Audio("./assets/sounds/click.mp3");
+    this.buttonSound.volume = 0.2;
+    this.buttonSound.loop = false;
+
+    this.eatenSound = new Audio("./assets/sounds/eating.mp3");
+    this.eatenSound.volume = 0.2;
+    this.eatenSound.loop = false;
+
+    this.hitSound = new Audio("./assets/sounds/pow.mp3");
+    this.hitSound.volume = 0.2;
+    this.hitSound.loop = false;
 
     const muteBtn = document.getElementById("mute");
     const updateMuteBtn = () => {
@@ -36,10 +49,17 @@ class Game {
     updateMuteBtn();
   }
 
+  togglePause() {
+    this.isPaused = !this.isPaused;
+  }
+
   muteToggle() {
     this.isMuted = !this.isMuted;
 
     this.mainSound.muted = this.isMuted;
+    this.buttonSound.muted = this.isMuted;
+    this.eatenSound.muted = this.isMuted;
+    this.hitSound.muted = this.isMuted;
   }
 
   isEatingFruit() {
@@ -53,6 +73,7 @@ class Game {
   }
 
   move(timestamp) {
+    if (this.isPaused) return;
     const elapsed = timestamp - this.lastTimestamp;
 
     if (elapsed >= this.frameInterval) {
@@ -60,6 +81,7 @@ class Game {
 
       this.snake.move(this.direction, this.grid + 1);
       if (this.isCollision() || this.isOutOfBounds() || this.checkCollision()) {
+        this.hitSound.play();
         this.endGame();
         return;
       }
@@ -76,6 +98,7 @@ class Game {
         }
         this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
         this.badFruit.position = this.badFruit.getRandomFruitPosition();
+        this.eatenSound.play();
       }
     }
   }
@@ -123,8 +146,26 @@ class Game {
   }
 
   endGame() {
-    alert(`Game over! Your score: ${this.score}, Your level: ${this.level}`);
-    this.resetGame();
+    // alert(`Game over! Your score: ${this.score}, Your level: ${this.level}`);
+    this.togglePause();
+    const modal = document.getElementById("game-over-modal");
+    const scoreDisplay = document.getElementById("score-display");
+    const levelDisplay = document.getElementById("level-display");
+
+    scoreDisplay.textContent = `Your Score: ${this.score}`;
+    levelDisplay.textContent = `Your Level: ${this.level}`;
+
+    modal.style.display = "flex";
+
+    const restartBtn = document.getElementById("restart-btn");
+
+    restartBtn.addEventListener("click", () => {
+      this.buttonSound.play();
+      modal.style.display = "none";
+      this.togglePause();
+      this.resetGame();
+      this.startGame();
+    });
   }
 
   resetGame() {
@@ -161,15 +202,23 @@ class Game {
     }
   }
 
+  updateGoodFruitPosition() {
+    // Generate a new position for the "good" fruit
+    this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
+  }
+
   gameLoop(timestamp) {
     this.move(timestamp);
     this.draw();
-    this.mainSound.play();
+    if (this.score % 5 === 0 && this.score !== 0 && this.score % 100 === 0) {
+      this.updateGoodFruitPosition();
+    }
     requestAnimationFrame(this.gameLoop.bind(this));
   }
 
   startGame() {
     document.addEventListener("keydown", this.handleKeyPress.bind(this));
+    this.mainSound.play();
     requestAnimationFrame(this.gameLoop.bind(this));
   }
 }
