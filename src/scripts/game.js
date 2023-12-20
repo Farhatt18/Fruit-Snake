@@ -180,7 +180,11 @@ class Game {
     levelDisplay.textContent = `Your Level: ${this.level}`;
     highScoreDisplay.textContent = `High Score: ${highScore}`;
 
-    modal.style.display = "flex";
+    setTimeout(() => {
+      modal.style.display = "flex";
+    }, 0);
+
+    // modal.style.display = "flex";
 
     const restartBtn = document.getElementById("restart-btn");
 

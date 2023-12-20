@@ -111,8 +111,14 @@ h1 {
 }
 
 #restart {
+  padding: 20px;
   margin-top: 20px;
   font-size: 20px;
+}
+
+h2 {
+  font-size: 60px;
+  font-family: myFont;
 }
 
 #sound-container {
@@ -167,4 +173,8 @@ h1 {
 #restart-btn:hover {
   background-color: blueviolet;
   color: white;
+}
+
+#high-score-display {
+  padding: 20px;
 }
