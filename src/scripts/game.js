@@ -73,20 +73,6 @@ class Game {
     );
   }
 
-  // isEatingFruit() {
-  //   const head = this.snake.head;
-  //   const fruit =
-  //     this.goodFruit.type === "good" ? this.goodFruit : this.badFruit;
-
-  //   // Introduce a tolerance for collision detection
-  //   const tolerance = 0.1;
-
-  //   return (
-  //     Math.abs(head.x - fruit.position.x) < tolerance &&
-  //     Math.abs(head.y - fruit.position.y) < tolerance
-  //   );
-  // }
-
   move(timestamp) {
     if (this.isPaused) return;
     const elapsed = timestamp - this.lastTimestamp;

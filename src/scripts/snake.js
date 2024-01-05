@@ -14,8 +14,8 @@ class Snake {
     this.ctx.fillStyle = "green";
     this.pos.forEach((spot) => {
       this.ctx.fillRect(
-        spot.x * this.tileSize,
-        spot.y * this.tileSize,
+        spot.x * this.grid,
+        spot.y * this.grid,
         this.grid,
         this.grid
       );
