@@ -14,6 +14,7 @@ class Game {
     this.goodFruit = new Fruit(this.ctx, this.grid, this.snake, "good");
     this.badFruit = new Fruit(this.ctx, this.grid, this.snake, "bad");
     this.isPaused = false;
+    this.snakeMove = true;
 
     this.lastTimestamp = 0;
     this.frameInterval = 200;
@@ -74,7 +75,7 @@ class Game {
   }
 
   move(timestamp) {
-    if (this.isPaused) return;
+    if (this.isPaused || !this.snakeMove) return;
     const elapsed = timestamp - this.lastTimestamp;
 
     if (elapsed >= this.frameInterval) {
@@ -84,6 +85,7 @@ class Game {
       if (this.isCollision() || this.isOutOfBounds() || this.checkCollision()) {
         this.hitSound.play();
         this.endGame();
+        this.snakeMove = false;
         return;
       }
 
@@ -147,43 +149,6 @@ class Game {
     this.ctx.fillText(`Score: ${this.score} | Level: ${this.level}`, 10, 20);
   }
 
-  endGame() {
-    // alert(`Game over! Your score: ${this.score}, Your level: ${this.level}`);
-    this.togglePause();
-    const modal = document.getElementById("game-over-modal");
-    const scoreDisplay = document.getElementById("score-display");
-    const levelDisplay = document.getElementById("level-display");
-    const highScoreDisplay = document.getElementById("high-score-display");
-
-    let highScore = localStorage.getItem("highScore") || 0;
-
-    if (this.score > highScore) {
-      highScore = this.score;
-      // Update the high score in localStorage
-      localStorage.setItem("highScore", highScore);
-    }
-
-    scoreDisplay.textContent = `Your Score: ${this.score}`;
-    levelDisplay.textContent = `Your Level: ${this.level}`;
-    highScoreDisplay.textContent = `High Score: ${highScore}`;
-
-    setTimeout(() => {
-      modal.style.display = "flex";
-    }, 0);
-
-    // modal.style.display = "flex";
-
-    const restartBtn = document.getElementById("restart-btn");
-
-    restartBtn.addEventListener("click", () => {
-      this.buttonSound.play();
-      modal.style.display = "none";
-      this.togglePause();
-      this.resetGame();
-      this.startGame();
-    });
-  }
-
   resetGame() {
     this.level = 1;
     this.score = 0;
@@ -192,35 +157,37 @@ class Game {
     this.badFruit = new Fruit(this.ctx, this.grid, this.snake, "bad");
     this.snake = new Snake(this.ctx, this.tileSize, this.grid);
     this.isPaused = false;
+    this.snakeMove = true;
   }
 
   handleKeyPress(event) {
-    switch (event.key) {
-      case "ArrowUp":
-        if (this.direction !== "down") {
-          this.direction = "up";
-        }
-        break;
-      case "ArrowDown":
-        if (this.direction !== "up") {
-          this.direction = "down";
-        }
-        break;
-      case "ArrowLeft":
-        if (this.direction !== "right") {
-          this.direction = "left";
-        }
-        break;
-      case "ArrowRight":
-        if (this.direction !== "left") {
-          this.direction = "right";
-        }
-        break;
+    if (!this.isPaused) {
+      switch (event.key) {
+        case "ArrowUp":
+          if (this.direction !== "down") {
+            this.direction = "up";
+          }
+          break;
+        case "ArrowDown":
+          if (this.direction !== "up") {
+            this.direction = "down";
+          }
+          break;
+        case "ArrowLeft":
+          if (this.direction !== "right") {
+            this.direction = "left";
+          }
+          break;
+        case "ArrowRight":
+          if (this.direction !== "left") {
+            this.direction = "right";
+          }
+          break;
+      }
     }
   }
 
   updateGoodFruitPosition() {
-    // Generate a new position for the "good" fruit
     this.goodFruit.position = this.goodFruit.getRandomFruitPosition();
   }
 
@@ -242,22 +209,62 @@ class Game {
   // }
 
   gameLoop(timestamp) {
-    this.move(timestamp);
-    this.draw();
-    if (this.score % 5 === 0 && this.score !== 0 && this.score % 100 === 0) {
-      this.updateGoodFruitPosition();
-    }
     if (!this.isPaused) {
+      this.move(timestamp);
+      this.draw();
+      if (this.score % 5 === 0 && this.score !== 0 && this.score % 100 === 0) {
+        this.updateGoodFruitPosition();
+      }
       requestAnimationFrame(this.gameLoop.bind(this));
     }
+  }
+
+  endGame() {
+    // alert(`Game over! Your score: ${this.score}, Your level: ${this.level}`);
+    this.togglePause();
+    this.isPaused = true;
+    const modal = document.getElementById("game-over-modal");
+    const scoreDisplay = document.getElementById("score-display");
+    const levelDisplay = document.getElementById("level-display");
+    const highScoreDisplay = document.getElementById("high-score-display");
+
+    scoreDisplay.textContent = `Your Score: ${this.score}`;
+    levelDisplay.textContent = `Your Level: ${this.level}`;
+
+    let highScore = localStorage.getItem("highScore") || 0;
+
+    if (this.score > highScore) {
+      highScore = this.score;
+
+      localStorage.setItem("highScore", highScore);
+    }
+
+    highScoreDisplay.textContent = `High Score: ${highScore}`;
+    document.removeEventListener("keydown", this.handleKeyPress.bind(this));
+
+    setTimeout(() => {
+      modal.style.display = "flex";
+    }, 0);
+
+    // modal.style.display = "flex";
+
+    const restartBtn = document.getElementById("restart-btn");
+
+    restartBtn.addEventListener("click", () => {
+      this.buttonSound.play();
+      modal.style.display = "none";
+      this.togglePause();
+      this.resetGame();
+      this.startGame();
+    });
   }
 
   startGame() {
     const highScore = localStorage.getItem("highScore") || 0;
     const highScoreDisplay = document.getElementById("high-score-display");
     highScoreDisplay.textContent = `High Score: ${highScore}`;
-    this.mainSound.play();
 
+    this.mainSound.play();
     document.addEventListener("keydown", this.handleKeyPress.bind(this));
     requestAnimationFrame(this.gameLoop.bind(this));
   }
