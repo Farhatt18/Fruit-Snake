@@ -25,7 +25,6 @@ Additionally, the project will include:
 
 ## Wireframes
 
-
 ![Alt text](./assets/wireFrame.png)
 
 ## Technologies, Libraries, APIs
