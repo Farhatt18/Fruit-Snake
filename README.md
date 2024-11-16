@@ -10,6 +10,7 @@ Experience the classic Snake Game in JavaScript! Guide your snake around the scr
 
 ## Functionality & MVPs
 
+
 In the Snake Game, users will be able to:
 
 - Use the arrow keys to control the snake's movement.
