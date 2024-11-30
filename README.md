@@ -12,7 +12,6 @@ Experience the classic Snake Game in JavaScript! Guide your snake around the scr
 
 In the Snake Game, users will be able to:
 
-
 - Use the arrow keys to control the snake's movement.
 - Eat fruits to increase the length of the snake.
 - End the game if the snake eats a bad fruit, collides with its own tail or the game boundaries.
