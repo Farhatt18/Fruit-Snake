@@ -34,7 +34,6 @@ Fruit Snake project will primarily use:
 - **JavaScript:** For game logic and user input handling.
 - **CSS:** For styling the game elements.
 
-
 ### Checking Collisions
 
 ![Alt text](./assets/collision.png)
