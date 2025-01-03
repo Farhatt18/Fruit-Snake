@@ -22,6 +22,7 @@ Additionally, the project will include:
 
 - A start screen with instructions on how to play.
 
+
 ## Wireframes
 
 ![Alt text](./assets/wireFrame.png)
