@@ -2,7 +2,6 @@
 
 ## Background
 
-
 Experience the classic Snake Game in JavaScript! Guide your snake around the screen to eat fruits and get longer. Be careful, though! If you accidentally munch on a bad fruit, it's game over. Test your skills and see how long you can make your snake grow without making a wrong move. Enjoy the simplicity and challenge of this timeless game brought to life with JavaScript, HTML, CSS, Canvas!
 
 [play here!](https://farhatt18.github.io/Fruit-Snake/)
