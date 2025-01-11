@@ -42,7 +42,6 @@ Fruit Snake project will primarily use:
 
 ### Implementing Speed of the Snake
 
-
 ![Alt text](./assets/speed1.png)
 ![Alt text](./assets/speed2.png)
 
